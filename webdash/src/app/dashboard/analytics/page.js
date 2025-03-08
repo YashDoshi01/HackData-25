@@ -1,40 +1,36 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useStressResults from "@/components/hooks/useStressResult";
-import { useSelector } from "react-redux";
+import { RadicalChart } from "@/components/RadicalChart";
 
 const DashboardAnalytics = () => {
-    const userId = localStorage.getItem("userId")
-    console.log(userId)
+  const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
   const { results, loading, error, refetch } = useStressResults(userId);
-    
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
+  // Filter results to include only today's data
+  const todayResults = results.filter((result) => 
+    new Date(result.createdAt).toISOString().split("T")[0] === today
+  );
+
+  // Calculate today's average stress percentage
+  const todayAverageStress =
+    todayResults.length > 0
+      ? todayResults.reduce((sum, result) => sum + result.percentStressed, 0) /
+        todayResults.length
+      : 0;
 
   return (
     <div>
-        <h1>Analytics Page</h1>
-      <h2 className="text-lg font-bold">Stress Analysis Results</h2>
-      <button
-        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-        onClick={refetch}
-      >
-        Refresh Data
-      </button>
-      <ul className="mt-4">
-        {results.length === 0 ? (
-          <p>No results found.</p>
-        ) : (
-          results.map((result) => (
-            <li key={result._id} className="border p-3 mb-2 rounded">
-              <p><strong>Stress Level:</strong> {result.stressLevel}</p>
-              <p><strong>Percentage:</strong> {result.percentStressed}%</p>
-              <p><strong>Remedies:</strong> {result.remedies.join(", ")}</p>
-            </li>
-          ))
-        )}
-      </ul>
+
+      <RadicalChart
+        data={[
+          { label: "Today's Stress", value: todayAverageStress, color: "hsl(var(--chart-1))" },
+        ]}
+      />
     </div>
   );
 };
