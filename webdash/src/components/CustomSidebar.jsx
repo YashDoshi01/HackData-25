@@ -5,7 +5,7 @@ import { IconUser, IconUsersGroup , IconBrandGoogleAnalytics , IconBurger ,IconC
 
 const sidebarLinks = [
   { href: "/dashboard/analytics", label: "Dashboard", icon: < IconBrandGoogleAnalytics size={20} /> },
-  { href: "/dashboard/community", label: "Community", icon: <IconUsersGroup size={20} /> },
+  { href: "/dashboard/chatbot", label: "ChatBot", icon: <IconUsersGroup size={20} /> },
   { href: "/dashboard/calendar", label: "Calendar", icon: <IconCalendarWeek size={20} /> },
   { href: "/dashboard/mealcheck", label: "Meal", icon: <IconBurger size={20} /> },
 ];

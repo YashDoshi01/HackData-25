@@ -32,6 +32,7 @@ const Login = () => {
           }
 
           dispatch(authenticated(true));
+          dispatch(userReference(responseData.userId))
           // dispatch(userReference(responseData.userId));
           localStorage.setItem("userId" , responseData.userId)
           localStorage.setItem("token", responseData.token);
