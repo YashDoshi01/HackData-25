@@ -1,13 +1,11 @@
 "use client";
-import { Label } from "recharts";
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useMemo } from "react";
 import {
   PolarGrid,
-  PolarRadiusAxis,
   RadialBar,
   RadialBarChart,
 } from "recharts";
-
 import {
   Card,
   CardContent,
@@ -15,86 +13,88 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChartContainer } from "@/components/ui/chart";
 
 export function RadicalChart({ data = [] }) {
   const [chartData, setChartData] = useState([]);
-  const [chartConfig, setChartConfig] = useState({});
+
+  // Compute the latest stress level once
+  const latestStressLevel = useMemo(() => data[0]?.value || 0, [data]);
+
+  // Dynamically calculate angles for the arc
+  const endAngle = useMemo(() => 90 - (latestStressLevel / 100) * 180, [latestStressLevel]);
+
+  
+
+  // Dynamically adjust radius based on stress level
+  const { innerRadius, outerRadius } = useMemo(() => {
+    if (latestStressLevel <= 25) return { innerRadius: 80, outerRadius: 90 };
+    if (latestStressLevel <= 50) return { innerRadius: 70, outerRadius: 100 };
+    if (latestStressLevel <= 75) return { innerRadius: 60, outerRadius: 110 };
+    return { innerRadius: 50, outerRadius: 120 };
+  }, [latestStressLevel]);
 
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
       const formattedData = data.map((item) => {
-        let color = "red";
-        if (item.value <= 40) color = "green"; // Low stress
-        else if (item.value > 40 && item.value <= 65) color = "orange"; // Moderate stress
+        let color = "#ef4444"; // Default: Red (High Stress)
+
+        if (item.value <= 25) color = "#22c55e"; // Green (Low Stress)
+        else if (item.value <= 50) color = "#f59e0b"; // Orange (Medium Stress)
+        else if (item.value <= 75) color = "#d97706"; // Dark Orange
+        else color = "#b91c1c"; // Dark Red
 
         return {
-          label: item.label || "Stress Level",
-          value: Math.min(100, Math.max(0, item.value)), // Ensure value is between 0-100
+          name: item.label,
+          value: Math.min(100, Math.max(0, item.value)), // Keep value in 0-100 range
           fill: color,
         };
       });
 
       setChartData(formattedData);
-      setChartConfig({
-        stressLevel: { label: "Stress Level" },
-        percentage: { label: "%", color: formattedData[0].fill || "red" },
-      });
     }
   }, [data]);
 
-  // Get latest stress level
-  const latestStressLevel = chartData.length > 0 ? chartData[0].value : 0;
-  const endAngle = 90 - (latestStressLevel / 100) * 360; // Dynamically calculate end angle
-
-
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col h-full">
       <CardHeader className="items-center pb-0">
         <CardTitle>Stress Level</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
-          {chartData.length > 0 && (
-            <RadialBarChart
-            data={chartData}
-            startAngle={90}
-            endAngle={endAngle} // Dynamically update end angle
-            innerRadius={80}
-            outerRadius={110}
-            barSize={15}
-          >
-              <PolarGrid gridType="circle" radialLines={false} stroke="none" />
-              <RadialBar dataKey="value" background cornerRadius={10} />
-              <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-                <Label
-                                  content={({ viewBox }) => {
-                                    if (viewBox?.cx && viewBox?.cy) {
-                                      return (
-                                        <text
-                                          x={viewBox.cx}
-                                          y={viewBox.cy}
-                                          textAnchor="middle"
-                                          dominantBaseline="middle"
-                                        >
-                                          <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-4xl font-bold">
-                                            {`${latestStressLevel} %`}
-                                          </tspan>
-                                          <tspan x={viewBox.cx} y={viewBox.cy + 24} className="fill-muted-foreground">
-                                            Stress Percent
-                                          </tspan>
-                                        </text>
-                                      );
-                                    }
-                                  }}
-                                />
-              </PolarRadiusAxis>
-            </RadialBarChart>
-          )}
-        </ChartContainer>
+        <div className="mx-auto aspect-square max-h-[250px]">
+        <RadialBarChart
+  width={300}
+  height={300}
+  innerRadius={110}
+  outerRadius={80}
+  data={chartData}
+  startAngle={240}  // Keep start angle fixed
+  endAngle={endAngle}  // Use the corrected calculation
+>
+
+            <PolarGrid radialLines={false} />
+            <RadialBar
+              background={{ fill: "#e5e7eb" }}
+              dataKey="value"
+              cornerRadius={8}
+              animationBegin={200}
+            />
+            {/* Center Text for Stress Level */}
+            <text
+              x="50%"
+              y="50%"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              className="text-3xl font-bold"
+            >
+              {latestStressLevel}%
+            </text>
+          </RadialBarChart>
+        </div>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="leading-none text-muted-foreground">Latest Stress Level</div>
+        <div className="leading-none text-muted-foreground">
+          Latest Stress Level
+        </div>
       </CardFooter>
     </Card>
   );

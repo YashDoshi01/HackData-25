@@ -38,7 +38,7 @@ const DashboardAnalytics = () => {
 
   return (
     <div className="px-6 py-8">
-      {/* Title & Description */}
+      {/* ... existing title and top section remains the same ... */}
       <h2 className="text-4xl font-bold text-gray-900 text-center mb-2">Serenity Scan</h2>
       <h1 className="text-xl text-gray-600 text-center font-medium">
         Monitor, Analyze & Reduce Stress with AI
@@ -51,8 +51,8 @@ const DashboardAnalytics = () => {
 
       {/* Top Section: Welcome Card & Stress Chart */}
       <div className="flex justify-center gap-x-10 mt-10">
-        {/* Welcome Card */}
-        <div className="bg-white shadow-md rounded-xl p-6 text-center max-w-[400px] flex flex-col">
+        {/* Welcome Card with hover effect */}
+        <div className="bg-white shadow-md rounded-xl p-6 text-center max-w-[400px] flex flex-col transition-transform duration-300 hover:scale-105 hover:shadow-lg">
           <h2 className="text-2xl font-bold text-gray-900">Welcome Back! 👋</h2>
           <p className="text-gray-600 mt-2">
             Let's check your stress levels and sleep insights for today.
@@ -62,28 +62,31 @@ const DashboardAnalytics = () => {
           </div>
         </div>
 
-        {/* Stress Chart */}
-        <div className="w-[500px]">
+        <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center w-[500px] transition-transform duration-300 hover:scale-105 hover:shadow-lg">
           <RadicalChart data={[{ label: "Latest Stress Level", value: latestStressLevel }]} />
         </div>
       </div>
 
       {/* Bottom Section: Bar Chart & Exercise Recommendations */}
       <div className="flex justify-center gap-x-10 mt-10">
-        {/* Bar Chart - Weekly Stress Levels */}
-        <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center max-w-[500px] w-full">
+        {/* Bar Chart Card with hover effect */}
+        <div className="bg-white shadow-md rounded-xl p-6 flex flex-col items-center max-w-[500px] w-full transition-transform duration-300 hover:scale-105 hover:shadow-lg">
           <h2 className="text-lg font-semibold mb-2 text-center">Weekly Stress Levels</h2>
           <BarChartComp />
         </div>
 
-        {/* Exercise Recommendations */}
-        <div className="bg-white shadow-md rounded-xl p-6 text-center max-w-[400px] w-full flex flex-col space-content-around">
-          <h2 className="text-lg font-semibold mb-2">🏋️ Recommended Exercises</h2>
-          <ul className="text-gray-600 mt-3">
-            {exercises.map((exercise, index) => (
-              <li key={index} className="py-1">{exercise}</li>
-            ))}
-          </ul>
+        {/* Exercise Recommendations - Modified section */}
+        <div className="bg-white shadow-md rounded-xl p-6 text-center max-w-[500px] w-full flex flex-col space-content-around transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+          <div className="mt-10">
+            <h2 className="text-xl font-semibold mb-3">🏋️ Recommended Exercises</h2>
+          </div>
+          <div className="flex flex-col mt-25">
+            <ul className="text-gray-600 mt-3 text-xl">
+              {exercises.map((exercise, index) => (
+                <li key={index} className="py-2 text-xl">{exercise}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
