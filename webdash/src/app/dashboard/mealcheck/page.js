@@ -61,6 +61,7 @@ function MealCheck() {
   };
 
   return (
+    
     <div className="flex flex-col items-center p-6 border rounded-lg shadow-lg bg-gray-900 text-white w-full max-w-lg mx-auto">
       <h2 className="text-lg font-semibold mb-3">Upload a File</h2>
 
