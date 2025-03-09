@@ -78,7 +78,7 @@ export function RadicalChart({ data = [] }) {
                                           dominantBaseline="middle"
                                         >
                                           <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-4xl font-bold">
-                                            {`${latestStressLevel} hrs`}
+                                            {`${latestStressLevel} %`}
                                           </tspan>
                                           <tspan x={viewBox.cx} y={viewBox.cy + 24} className="fill-muted-foreground">
                                             Stress Percent

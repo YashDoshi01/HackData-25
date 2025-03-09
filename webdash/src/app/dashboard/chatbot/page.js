@@ -35,6 +35,10 @@ export default function Chatbot() {
   }, [messages]);
 
   return (
+    <div
+      className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/background-2076334_1280.jpg')" }}
+    >
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
       {/* Chat Messages */}
       <div className="h-[500px] overflow-y-auto space-y-3 p-4 border rounded-lg">
@@ -70,6 +74,7 @@ export default function Chatbot() {
           Send
         </button>
       </div>
+    </div>
     </div>
   );
 }

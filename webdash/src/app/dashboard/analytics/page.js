@@ -35,7 +35,10 @@ const todayResults = results.filter((result) => {
   else if (latestStressLevel >= 60) sleephours = 10;
 
   return (
-    <>
+    
+    <div
+    >
+        <h2 className="text-3xl ">Serenity Scan</h2>
       <div className="flex justify-center gap-x-10">
         <div className="w-[500px]">
         <RadicalChart
@@ -51,7 +54,7 @@ const todayResults = results.filter((result) => {
         <BarChartComp />
       </div>
       
-    </>
+    </div>
   );
 };
 
